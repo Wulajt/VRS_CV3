@@ -47,12 +47,30 @@ int main(void)
 
   /* Enable clock for GPIO port A*/
 
-	//type your code for GPIOA clock enable here:
+  RCC_AHBENR_REG |= (uint32_t)(1 << 17); // IO port A clock is enabled
 
 
   /* GPIOA pin 3 and 4 setup */
+  /*GPIO MODER register*/
+  //Set Mode for pin 3
+  GPIOA_MODER_REG &= ~(uint32_t)(0x3 << 6); // Set to 00 : Input
 
-	//type your code for GPIOA pins setup here:
+  //Set Mode for pin 4
+  GPIOA_MODER_REG &= ~(uint32_t)(0x3 << 8); // Reset to 00 : Input
+  GPIOA_MODER_REG |= (uint32_t)(1 << 8);    // Set to 01 : Output
+
+  /*GPIO OTYPER register*/
+  GPIOA_OTYPER_REG &= ~(1 << 4); //Type of output register on pin 4, set to 0 : push-pull (reset state)
+
+  /*GPIO OSPEEDR register*/
+  //Set Low speed for GPIOA pin 4
+  GPIOA_OSPEEDER_REG &= ~(0x3 << 8); //Speed of output register on pin 4, set to 0 : low speed
+
+  /*GPIO PUPDR register, reset*/
+  //Set pull up for GPIOA pin 3 (input)
+  GPIOA_PUPDR_REG |= (1 << 6);     // Set pull up - pull down register on pin 3 to 1 : pull up
+  //Set no pull for GPIOA pin 4 (output)
+  GPIOA_PUPDR_REG &= ~(0x3 << 8);  // Set pull up - pull down register on pin 4 to 0 : no pull up, no pull down
 
 
   while (1)
@@ -89,6 +107,7 @@ int main(void)
   */
 void Error_Handler(void)
 {
+
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
 
