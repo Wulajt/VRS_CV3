@@ -41,10 +41,10 @@
 #define	RCC_AHBENR_REG			*(volatile uint32_t *)(RCC_BASE_ADDR + 0x00000014U)
 
 /* LED and button macros */
-#define LED_ON					*((volatile uint32_t *)(GPIOA_BSRR_REG)) |= (1 << 4) // GPIOA pin 4
-#define LED_OFF					*((volatile uint32_t *)(GPIOA_BRR_REG)) |= (1 << 4)  // GPIOA pin 4
+#define LED_ON					*((volatile uint32_t *)(&GPIOA_BSRR_REG)) |= (1 << 4) // GPIOA pin 4
+#define LED_OFF					*((volatile uint32_t *)(&GPIOA_BRR_REG)) |= (1 << 4)  // GPIOA pin 4
 
-#define BUTTON_GET_STATE		*((volatile uint32_t *)(GPIOA_IDR_REG)) & (1 << 3)
+#define BUTTON_GET_STATE		*((volatile uint32_t *)(&GPIOA_IDR_REG)) & (1 << 3)
 
 
 #endif /* ASSIGNMENT_H_ */
