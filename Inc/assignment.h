@@ -45,6 +45,14 @@
 #define LED_OFF					*((volatile uint32_t *)(&GPIOA_BRR_REG)) |= (1 << 4)  // GPIOA pin 4
 
 #define BUTTON_GET_STATE		*((volatile uint32_t *)(&GPIOA_IDR_REG)) & (1 << 3)
+#define LED_GET_STATE			*((volatile uint32_t *)(&GPIOA_IDR_REG)) & (1 << 4)
 
+typedef enum {
+	NONE = 0,
+	RISE = 1,
+	FALL = 2
+}EDGE_TYPE;
+
+EDGE_TYPE edgeDetect(uint8_t pin_state, uint8_t samples);
 
 #endif /* ASSIGNMENT_H_ */

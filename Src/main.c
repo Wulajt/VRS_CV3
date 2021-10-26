@@ -73,31 +73,43 @@ int main(void)
   GPIOA_PUPDR_REG &= ~(0x3 << 8);  // Set pull up - pull down register on pin 4 to 0 : no pull up, no pull down
 
 
-  while (1)
-  {
-	  if(BUTTON_GET_STATE)
-	  {
-		  // 0.25s delay
-		  LL_mDelay(250);
-		  LED_ON;
-		  // 0.25s delay
-		  LL_mDelay(250);
-		  LED_OFF;
-	  }
-	  else
-	  {
-		  // 1s delay
-		  LL_mDelay(1000);
-		  LED_ON;
-		  // 1s delay
-		  LL_mDelay(1000);
-		  LED_OFF;
-	  }
-  }
+  uint8_t pin_state = BUTTON_GET_STATE;
 
+   while (1){
+
+  	  if(pin_state != (BUTTON_GET_STATE)){
+
+	  EDGE_TYPE edge = edgeDetect(BUTTON_GET_STATE, 5);
+
+  		  if(edge == RISE){
+
+  			  if(LED_GET_STATE){
+  				  LED_OFF;
+  			  }else{
+  				  LED_ON;
+  			  }
+  		  }
+  	  }
+
+  	pin_state = BUTTON_GET_STATE;
+    LL_mDelay(5);
+   }
 }
 
 /* USER CODE BEGIN 4 */
+
+EDGE_TYPE edgeDetect(uint8_t pin_state, uint8_t samples){
+
+	EDGE_TYPE type = NONE;
+
+	for (uint8_t i = 1; i<samples-1; i++){
+		LL_mDelay(5);
+		if (pin_state != (BUTTON_GET_STATE)) return type;
+	}
+
+	type = 1 + pin_state;
+	return type;
+}
 
 /* USER CODE END 4 */
 
